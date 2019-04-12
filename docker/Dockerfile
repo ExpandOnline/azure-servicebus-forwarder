@@ -29,4 +29,7 @@ RUN mkdir -p /aws && \
 COPY --from=builder /go/bin/azure-servicebus-forwarder /app/redirect
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 ENTRYPOINT ["/entrypoint.sh"]
