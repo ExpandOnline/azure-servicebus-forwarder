@@ -82,6 +82,9 @@ func (l Listener) ensureTopic(ctx context.Context, tm *servicebus.TopicManager, 
 	}
 
 	l.output.Info.Println("Topic does not exist, creating")
+
+	panic("Topic does not exist")
+
 	te, err = tm.Put(ctx, name, opts...)
 	if err != nil {
 		l.output.Info.Fatalln(err)
@@ -101,6 +104,8 @@ func (l Listener) ensureSubscription(ctx context.Context, sm *servicebus.Subscri
 
 		return subEntity, nil
 	}
+
+	panic("Subscription does not exist")
 
 	l.output.Info.Println("Subscription does not exist, creating")
 	subEntity, err = sm.Put(ctx, name, opts...)
