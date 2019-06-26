@@ -81,17 +81,19 @@ func (l Listener) ensureTopic(ctx context.Context, tm *servicebus.TopicManager, 
 		return te, nil
 	}
 
-	l.output.Info.Println("Topic does not exist, creating")
+	panic(err)
 
-	panic("Topic does not exist")
+	// l.output.Info.Println("Topic does not exist, creating")
 
-	te, err = tm.Put(ctx, name, opts...)
-	if err != nil {
-		l.output.Info.Fatalln(err)
-		return nil, err
-	}
+	// panic("Topic does not exist")
 
-	return te, nil
+	// te, err = tm.Put(ctx, name, opts...)
+	// if err != nil {
+	// 	l.output.Info.Fatalln(err)
+	// 	return nil, err
+	// }
+
+	// return te, nil
 }
 
 func (l Listener) ensureSubscription(ctx context.Context, sm *servicebus.SubscriptionManager, opts ...servicebus.SubscriptionManagementOption) (*servicebus.SubscriptionEntity, error) {
@@ -105,14 +107,15 @@ func (l Listener) ensureSubscription(ctx context.Context, sm *servicebus.Subscri
 		return subEntity, nil
 	}
 
-	panic("Subscription does not exist")
+	panic(err)
+	// panic("Subscription does not exist, ask Tuba!")
 
-	l.output.Info.Println("Subscription does not exist, creating")
-	subEntity, err = sm.Put(ctx, name, opts...)
-	if err != nil {
-		l.output.Info.Fatalln(err)
-		return nil, err
-	}
+	// l.output.Info.Println("Subscription does not exist, creating")
+	// subEntity, err = sm.Put(ctx, name, opts...)
+	// if err != nil {
+	// 	l.output.Info.Fatalln(err)
+	// 	return nil, err
+	// }
 
-	return subEntity, nil
+	// return subEntity, nil
 }
