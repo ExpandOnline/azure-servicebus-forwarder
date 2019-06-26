@@ -36,3 +36,7 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[[override]]
+  name = "pack.ag/amqp"
+  version = "0.10.4"

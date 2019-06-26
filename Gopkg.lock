@@ -114,15 +114,15 @@
   version = "v0.20.2"
 
 [[projects]]
-  digest = "1:ea6ef7920f5dd687561e714fb9302bd3e14183d47f641102245852495052dc2b"
+  digest = "1:51aacd12c585e0ac681a8052f0d54632e812ea32ae04ac79441333509692fbab"
   name = "pack.ag/amqp"
   packages = [
     ".",
     "internal/testconn",
   ]
   pruneopts = "UT"
-  revision = "a69a1d51f8e7b55567f8d190a8fab04503a97735"
-  version = "v0.11.0"
+  revision = "ea7340761aa520db6ca4795d9c0dbadf1670c347"
+  version = "v0.10.4"
 
 [solve-meta]
   analyzer-name = "dep"

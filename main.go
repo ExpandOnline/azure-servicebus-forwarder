@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -17,6 +18,8 @@ type MessageHandler struct {
 func (mp MessageHandler) Handle(ctx context.Context, msg *servicebus.Message) error {
 
 	err := mp.Publisher.Publish(msg)
+
+	fmt.Println("Got message")
 
 	if err != nil {
 		return msg.Abandon(ctx)

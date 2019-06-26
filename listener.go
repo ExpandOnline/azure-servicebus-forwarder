@@ -32,19 +32,19 @@ func (l *Listener) SetSubscriptionName(sub string) {
 func (l Listener) Listen(ctx context.Context, ns *servicebus.Namespace, handler MessageHandler) {
 
 	l.output.Info.Println("Creating topic client...")
-	tm := ns.NewTopicManager()
+	// tm := ns.NewTopicManager()
 
-	topicEntity, err := l.ensureTopic(ctx, tm)
+	// topicEntity, err := l.ensureTopic(ctx, tm)
 
 	l.output.Info.Println("Creating subscription client...")
-	sm, err := ns.NewSubscriptionManager(topicEntity.Name)
-	if err != nil {
-		l.output.Info.Fatalln(err)
-	}
+	// sm, err := ns.NewSubscriptionManager(topicEntity.Name)
+	// if err != nil {
+	// 	l.output.Info.Fatalln(err)
+	// }
 
-	subEntity, err := l.ensureSubscription(ctx, sm)
+	// subEntity, err := l.ensureSubscription(ctx, sm)
 
-	topic, err := ns.NewTopic(topicEntity.Name)
+	topic, err := ns.NewTopic(l.TopicName)
 	if err != nil {
 		l.output.Info.Fatalln(err)
 	}
@@ -53,7 +53,7 @@ func (l Listener) Listen(ctx context.Context, ns *servicebus.Namespace, handler 
 	}()
 
 	l.output.Info.Println("Creating subscription...")
-	sub, err := topic.NewSubscription(subEntity.Name)
+	sub, err := topic.NewSubscription(l.SubscriptionName)
 	if err != nil {
 		l.output.Info.Fatalln(err)
 	}
