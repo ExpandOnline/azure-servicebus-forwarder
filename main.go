@@ -22,6 +22,8 @@ func (mp MessageHandler) Handle(ctx context.Context, msg *servicebus.Message) er
 	fmt.Println("Got message")
 
 	if err != nil {
+		fmt.Println("ABANDONED MESSAGE")
+		fmt.Println(err)
 		return msg.Abandon(ctx)
 	}
 
