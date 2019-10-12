@@ -12,7 +12,7 @@ RUN git clone https://github.com/ExpandOnline/azure-servicebus-forwarder.git $GO
 RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 RUN cd $GOPATH/src/github.com/expandonline/azure-servicebus-forwarder \
   && dep ensure \
-  && go install -v -ldflags "-X main.version=${COMMIT_HASH}" github.com/expandonline/azure-servicebus-forwarder
+  && go install -v github.com/expandonline/azure-servicebus-forwarder
 
 
 FROM alpine
