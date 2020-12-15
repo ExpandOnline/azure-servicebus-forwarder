@@ -44,6 +44,8 @@ func main() {
 	destConnStr := os.Getenv("DEST_CONN")      // Destination connection string
 	destExchange := os.Getenv("DEST_EXCHANGE") // Destination exchange
 
+	isDLQ := os.Getenv("IS_DLQ")
+
 	output := Output{
 		Info:  log.New(os.Stdout, "["+sbTopicName+"/"+sbSubscriptionName+"] ", log.Ldate|log.Ltime),
 		Error: log.New(os.Stderr, "["+sbTopicName+"/"+sbSubscriptionName+"] ", log.Ldate|log.Ltime|log.Lshortfile),
@@ -68,15 +70,16 @@ func main() {
 		output.Error.Fatalln(err)
 	}
 
-	startListener(ctx, ns, sbTopicName, sbSubscriptionName, &output, destConnStr, destExchange)
+	startListener(ctx, ns, sbTopicName, sbSubscriptionName, &output, destConnStr, destExchange, isDLQ == "yes")
 }
 
-func startListener(ctx context.Context, ns *servicebus.Namespace, topic string, sub string, output *Output, destConnStr string, destExchange string) {
+func startListener(ctx context.Context, ns *servicebus.Namespace, topic string, sub string, output *Output, destConnStr string, destExchange string, isDLQ bool) {
 	listener := Listener{}
 
 	listener.SetOutput(output)
 	listener.SetTopicName(topic)
 	listener.SetSubscriptionName(sub)
+	listener.setDLQ(isDLQ)
 
 	pub := Publisher{}
 	pub.SetOutput(output)

@@ -10,6 +10,7 @@ import (
 type Listener struct {
 	TopicName        string
 	SubscriptionName string
+	IsDLQ            bool
 	output           *Output
 }
 
@@ -26,6 +27,11 @@ func (l *Listener) SetTopicName(topic string) {
 // SetSubscriptionName ...
 func (l *Listener) SetSubscriptionName(sub string) {
 	l.SubscriptionName = sub
+}
+
+// SetTopicName ...
+func (l *Listener) setDLQ(isDLQ bool) {
+	l.IsDLQ = isDLQ
 }
 
 // Listen ...
@@ -58,9 +64,16 @@ func (l Listener) Listen(ctx context.Context, ns *servicebus.Namespace, handler 
 		l.output.Info.Fatalln(err)
 	}
 
-	l.output.Info.Println("Started receiving messages..")
-	if err := sub.Receive(ctx, handler); err != nil {
-		l.output.Info.Fatalln(err)
+	if l.IsDLQ {
+		l.output.Info.Println("Started receiving messages from DLQ..")
+		for {
+			l.receiveDLQ(ctx, sub, handler)
+		}
+	} else {
+		l.output.Info.Println("Started receiving messages..")
+		if err := sub.Receive(ctx, handler); err != nil {
+			l.output.Info.Fatalln(err)
+		}
 	}
 
 	err = sub.Close(ctx)
@@ -68,6 +81,20 @@ func (l Listener) Listen(ctx context.Context, ns *servicebus.Namespace, handler 
 		l.output.Info.Fatalln(err)
 	}
 
+}
+
+func (l Listener) receiveDLQ(ctx context.Context, sub *servicebus.Subscription, handler MessageHandler) {
+
+	rec, err := sub.NewDeadLetterReceiver(ctx)
+	if err != nil {
+		l.output.Info.Fatalln(err)
+	}
+
+	if err = rec.ReceiveOne(ctx, handler); err != nil {
+		l.output.Info.Fatalln(err)
+	}
+
+	rec.Close(ctx)
 }
 
 func (l Listener) ensureTopic(ctx context.Context, tm *servicebus.TopicManager, opts ...servicebus.TopicManagementOption) (*servicebus.TopicEntity, error) {
